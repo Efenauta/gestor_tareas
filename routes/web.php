@@ -12,8 +12,9 @@ Route::resource('proyectos', ProyectoController::class);
 Route::resource('tareas', TareaController::class);
 Route::resource('trabajadores', TrabajadorController::class);
 
-// Ruta para crear tareas asociadas a un proyecto específico
-Route::get('tareas/create/{proyecto}', [TareaController::class, 'create'])->name('tareas.create');
+//Ruta para crear tareas
+Route::get('tareas/create', [TareaController::class, 'create'])->name('tareas.createNP');
+Route::get('proyectos/{proyecto}/create', [TareaController::class, 'create'])->name('tareas.create');
 
 // Ruta para asignar trabajador a una tarea
-Route::post('tareas/{tarea}/asignar/{trabajador}', [ProyectoController::class, 'asignarTrabajador'])->name('tareas.asignar');
+Route::post('tareas/{tarea}/asignar', [ProyectoController::class, 'asignarTrabajador'])->name('tareas.asignar');

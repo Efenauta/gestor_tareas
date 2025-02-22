@@ -20,32 +20,33 @@ class TareaController extends Controller
         return view('tareas.show', compact('tarea'));
     }
 
-    public function create(Proyecto $proyecto)
+    public function create(Proyecto $proyecto = null)
     {
         // Pasamos el objeto del proyecto a la vista
         return view('tareas.create', compact('proyecto'));
     }
 
-    public function store(Request $request, Proyecto $proyecto)
+    public function store(Request $request)
     {
-        // Validación de los campos si es necesario
         $request->validate([
             'nombre' => 'required',
             'descripcion' => 'required',
             'finalizada' => 'boolean',
+            'id_proyecto' => 'required|exists:proyectos,id',
         ]);
 
         // Crear la tarea asociada al proyecto
-        $tarea = $proyecto->tareas()->create([
+        $tarea = Tarea::create([
             'nombre' => $request->nombre,
             'descripcion' => $request->descripcion,
             'finalizada' => $request->has('finalizada'),
-            'proyecto_id' => $proyecto->id,  // Asociamos la tarea al proyecto
+            'id_proyecto' => $request->id_proyecto,
         ]);
 
         // Redirigir al proyecto donde se creó la tarea
-        return redirect()->route('proyectos.show', $proyecto);
+        return redirect()->route('proyectos.show', $tarea->id_proyecto);
     }
+
 
     public function edit(Tarea $tarea)
     {

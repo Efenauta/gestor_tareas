@@ -11,13 +11,15 @@ class ProyectoController extends Controller
 {
     public function index()
     {
-        $proyectos = Proyecto::paginate(10);
+        $proyectos = Proyecto::simplePaginate(10);
         return view('proyectos.index', compact('proyectos'));
     }
 
     public function show(Proyecto $proyecto)
     {
-        return view('proyectos.show', compact('proyecto'));
+        $trabajadores = Trabajador::all();
+
+        return view('proyectos.show', compact('proyecto', 'trabajadores'));
     }
 
     public function create()
