@@ -29,21 +29,29 @@ class TrabajadorController extends Controller
         return redirect()->route('trabajadores.index');
     }
 
-    public function edit(Trabajador $trabajador)
-    {
-        return view('trabajadores.edit', compact('trabajador'));
-    }
-
-    public function update(Request $request, Trabajador $trabajador)
-    {
-        $trabajador->update($request->all());
-        return redirect()->route('trabajadores.index');
-    }
-
     public function destroy(Trabajador $trabajador)
     {
         $trabajador->delete();
         return redirect()->route('trabajadores.index');
+    }
+
+    public function modify(Trabajador $trabajador)
+    {
+        return view('trabajadores.modify', compact('trabajador'));
+    }
+
+    // Método para actualizar el trabajador en la base de datos
+    public function update(Request $request, Trabajador $trabajador)
+    {
+        $request->validate([
+            'nombre' => 'required|string|max:255',
+            'rol' => 'required|string|max:255',
+        ]);
+
+        // Actualizar el trabajador con los nuevos datos
+        $trabajador->update($request->all());
+
+        return redirect()->route('trabajadores.index')->with('success', 'Trabajador actualizado correctamente.');
     }
 }
 

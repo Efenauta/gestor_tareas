@@ -27,6 +27,7 @@
                         foreach ($proyectos as $proyecto){
                             echo '<option value="' . $proyecto->id . '">' . $proyecto->nombre . '</option>';
                         }
+                        $proyecto = null;
                         echo '</select>';
                     } else {
                         echo 'ERROR!<br>';
@@ -35,7 +36,8 @@
             </div>
             <div>
                 <label for="finalizada">Finalizada: </label>
-                <input type="checkbox" name="finalizada" id="finalizada">
+                <input type="hidden" name="finalizada" value="0">
+                <input type="checkbox" name="finalizada" id="finalizada" value="1">
             </div>
             <button type="submit" class="btn btn-primary">Crear
             <?php
@@ -44,6 +46,11 @@
                 }
             ?>
             </button>
+            <?php
+                if(isset($proyecto)){
+                    echo "<a class='btn btn-primary' href='/proyectos/" . $proyecto->id . "'>Volver a " .  $proyecto->nombre . "</a>";
+                }
+            ?>
         </form>
     </div>
 @endsection

@@ -17,13 +17,17 @@ class TareaController extends Controller
 
     public function show(Tarea $tarea)
     {
-        return view('tareas.show', compact('tarea'));
+        $trabajadores = Trabajador::all();
+        $proyectos = Proyecto::all();
+        return view('tareas.show', compact('tarea', "trabajadores", "proyectos"));
     }
 
     public function create(Proyecto $proyecto = null)
     {
+        $trabajadores = Trabajador::all();
+        $proyectos = Proyecto::all();
         // Pasamos el objeto del proyecto a la vista
-        return view('tareas.create', compact('proyecto'));
+        return view('tareas.create', compact('proyecto', "trabajadores", "proyectos"));
     }
 
     public function store(Request $request)
@@ -35,11 +39,13 @@ class TareaController extends Controller
             'id_proyecto' => 'required|exists:proyectos,id',
         ]);
 
+        $finalizada = $request->has('finalizada') ? true : false;
+
         // Crear la tarea asociada al proyecto
         $tarea = Tarea::create([
             'nombre' => $request->nombre,
             'descripcion' => $request->descripcion,
-            'finalizada' => $request->has('finalizada'),
+            'finalizada' => $finalizada,
             'id_proyecto' => $request->id_proyecto,
         ]);
 
@@ -53,15 +59,34 @@ class TareaController extends Controller
         return view('tareas.edit', compact('tarea'));
     }
 
-    public function update(Request $request, Tarea $tarea)
-    {
-        $tarea->update($request->all());
-        return redirect()->route('tareas.show', $tarea);
-    }
-
     public function destroy(Tarea $tarea)
     {
         $tarea->delete();
         return redirect()->route('proyectos.show', $tarea->proyecto);
+    }
+
+    // Método para mostrar el formulario de edición de tarea
+    public function modify(Tarea $tarea)
+    {
+        // Obtener todos los proyectos para seleccionarlos en el formulario
+        $proyectos = Proyecto::all();
+
+        return view('tareas.modify', compact('tarea', 'proyectos'));
+    }
+
+    // Método para actualizar la tarea en la base de datos
+    public function update(Request $request, Tarea $tarea)
+    {
+        $request->validate([
+            'nombre' => 'required|string|max:255',
+            'descripcion' => 'required|string|max:1000',
+            'finalizada' => 'required|boolean',
+            'id_proyecto' => 'required|exists:proyectos,id',
+        ]);
+
+        // Actualizar la tarea con los nuevos datos
+        $tarea->update($request->all());
+
+        return redirect()->route('tareas.index')->with('success', 'Tarea actualizada correctamente.');
     }
 }

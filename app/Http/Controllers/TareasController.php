@@ -8,20 +8,23 @@ use Illuminate\Http\Request;
 
 class TareasController extends Controller
 {
-    public function asignarTrabajador(Tarea $tarea, Request $request)
+    public function asignarTrabajador(Tarea $tarea, $name, Request $request)
     {
-        // Verificar si el trabajador ya tiene 5 tareas asignadas
-        $trabajoCount = $request->trabajador_id->tareas()->count();
+        // Obtener el trabajador seleccionado
+        $trabajador = Trabajador::find($request->trabajador_id);
 
+        // Contar cuántas tareas tiene asignadas el trabajador a través de la tabla pivote
+        $trabajoCount = $trabajador->tareas()->count();
+
+        // Validar si el trabajador ya tiene 5 tareas asignadas
         if ($trabajoCount >= 5) {
-            // Si el trabajador ya tiene 5 tareas, redirige de vuelta con un mensaje de error
             return back()->with('error', 'El trabajador ya tiene 5 tareas asignadas.');
         }
 
-        // Si tiene menos de 5 tareas, se le asigna la nueva tarea
-        $tarea->trabajadores()->attach($request->trabajador_id);
+        // Asignar el trabajador a la tarea
+        $tarea->trabajadores()->attach($trabajador->id);
 
-        // Redirigir de vuelta con éxito
-        return back()->with('success', 'Trabajador asignado a la tarea correctamente.');
+        // Redirigir con mensaje de éxito
+        return back()->with('success', 'Trabajador asignado correctamente a la tarea.');
     }
 }

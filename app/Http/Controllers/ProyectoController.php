@@ -47,5 +47,24 @@ class ProyectoController extends Controller
 
         return back()->with('success', 'Trabajador asignado correctamente a la tarea.');
     }
+
+    //modificar el proyecto
+    public function modify(Proyecto $proyecto)
+    {
+        return view('proyectos.modify', compact('proyecto'));
+    }
+
+    public function update(Request $request, Proyecto $proyecto)
+    {
+        $request->validate([
+            'nombre' => 'required|string|max:255',
+            'descripcion' => 'required|string|max:1000',
+        ]);
+
+        $proyecto->update($request->all());
+
+        return redirect()->route('proyectos.index')->with('success', 'Proyecto actualizado correctamente.');
+    }
+
 }
 

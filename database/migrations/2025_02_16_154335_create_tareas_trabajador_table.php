@@ -10,7 +10,7 @@ class CreateTareasTrabajadorTable extends Migration
     {
         Schema::create('tareas_trabajador', function (Blueprint $table) {
             $table->foreignId('id_tarea')->constrained('tareas')->onDelete('cascade');
-            $table->foreignId('id_trabajador')->constrained('trabajadores')->onDelete('cascade');
+            $table->foreignId('id_trabajador')->constrained('trabajadors')->onDelete('cascade');
             $table->primary(['id_tarea', 'id_trabajador']);
         });
     }
