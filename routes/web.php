@@ -27,3 +27,4 @@ Route::put('/tareas/{tarea}', [TareaController::class, 'update'])->name('tareas.
 
 // Ruta para asignar trabajador a una tarea
 Route::post('tareas/{tarea}/{name}/asignar', [TareasController::class, 'asignarTrabajador'])->name('tareas.asignar');
+Route::delete('tareas/{tarea}/{trabajador}/eliminarTrabajador', [TareasController::class, 'eliminarTrabajador'])->name('tareas.eliminarTrabajador');

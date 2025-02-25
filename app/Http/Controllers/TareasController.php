@@ -27,4 +27,19 @@ class TareasController extends Controller
         // Redirigir con mensaje de éxito
         return back()->with('success', 'Trabajador asignado correctamente a la tarea.');
     }
+
+    public function eliminarTrabajador(Tarea $tarea, Trabajador $trabajador)
+    {
+        // Verificar si el trabajador está asignado a la tarea
+        if (!$tarea->trabajadores()->where('id', $trabajador->id)->exists()) {
+
+            return back()->with('error', 'El trabajador no está asignado a esta tarea.');
+        }
+
+        // Eliminar la asignación del trabajador de la tarea
+        $tarea->trabajadores()->detach($trabajador->id);
+
+        // Redirigir con mensaje de éxito
+        return back()->with('success', 'Trabajador eliminado correctamente de la tarea.');
+    }
 }

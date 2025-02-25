@@ -28,6 +28,7 @@
                         <p style="color: red;">¡No hay trabajadores disponibles!</p>
                     @endif
                 </li>
+                <br>
             @endforeach
         </ul>
     </div>

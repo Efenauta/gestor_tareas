@@ -11,8 +11,9 @@ class TareaController extends Controller
 {
     public function index()
     {
+        $trabajadores = Trabajador::all();
         $tareas = Tarea::paginate(10);
-        return view('tareas.index', compact('tareas'));
+        return view('tareas.index', compact('tareas', "trabajadores"));
     }
 
     public function show(Tarea $tarea)
